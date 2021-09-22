@@ -28,6 +28,7 @@ _testmain.go
 *.iml
 
 gen-release-notes
+bin
 
 data/*
 
