@@ -29,12 +29,13 @@ Usage: %[2]s [-r repo] [-m milestone] [-p prev milestone]
 Options:
     -h                   help
     -v                   show version and exit
-	-t                   github token (optional)
+    -t                   github token (optional)
     -r repo              repository that should be used
     -m milestone         milestone to be used
 	-p prev milestone    previous milestone
 Examples: 
-    %[2]s -r rke2 -m v1.21.5     generate release notes for RKE2 for milestone v1.21.5
+	# generate release notes for RKE2 for milestone v1.21.5
+    %[2]s -r k3s -m v1.21.5+k3s1 -p v1.21.4+k3s1 
 `
 
 // repoToOrg associates repo to org.
