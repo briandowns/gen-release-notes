@@ -12,12 +12,17 @@ go get github.com/briandowns/gen-release-notes
 
 ### Examples
 
-Generate release notes for RKE2 v1.22.2+rke2r1
+Generate release notes for k3s v1.21.5+k3s1
 
-```
+```sh
 gen-release-notes -r k3s -m v1.21.5+k3s1 -p v1.21.4+k3s1
 ```
 
+Or via Docker
+
+```sh
+docker run --rm -it briandowns/gen-release-notes:v0.2.0 gen-release-notes -r k3s -m v1.21.5+k3s1 -p v1.21.4+k3s1
+```
 
 ## Contributions
 
