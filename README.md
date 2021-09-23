@@ -15,7 +15,7 @@ go get github.com/briandowns/gen-release-notes
 Generate release notes for RKE2 v1.22.2+rke2r1
 
 ```
-gen-release-notes -r rke2 -m v1.22.2+rke2r1 -p v1.22.1+rke2r1
+gen-release-notes -r k3s -m v1.21.5+k3s1 -p v1.21.4+k3s1
 ```
 
 
