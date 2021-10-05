@@ -6,12 +6,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/briandowns/gen-release-notes/repository"
-	"github.com/briandowns/gen-release-notes/token"
-	"github.com/google/go-github/v39/github"
-	"golang.org/x/oauth2"
 )
 
 var (
@@ -19,8 +15,6 @@ var (
 	version string
 	gitSHA  string
 )
-
-const httpTimeout = time.Second * 10
 
 const usage = `version: %s
 Usage: %[2]s [-t token] [-r repo] [-m milestone] [-p prev milestone]
@@ -104,12 +98,7 @@ func main() {
 
 	ctx := context.Background()
 
-	ts := token.TokenSource{
-		AccessToken: ghToken,
-	}
-	oauthClient := oauth2.NewClient(ctx, &ts)
-	oauthClient.Timeout = httpTimeout
-	client := github.NewClient(oauthClient)
+	client := repository.NewGithub(ctx, ghToken)
 
 	origIssue, err := repository.RetrieveOriginalIssue(ctx, client, repo, issueID)
 	if err != nil {
