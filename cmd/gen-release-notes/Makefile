@@ -1,6 +1,6 @@
 GO = go
 
-BINDIR := ../../bin
+BINDIR := bin
 BINARY := gen-release-notes
 
 VERSION = v0.3.0
