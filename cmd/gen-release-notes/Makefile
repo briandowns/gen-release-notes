@@ -1,9 +1,9 @@
 GO = go
 
-BINDIR := ../../bin
+BINDIR := bin
 BINARY := gen-release-notes
 
-VERSION = v0.3.0
+VERSION = v0.4.0
 GIT_SHA = $(shell git rev-parse HEAD)
 LDFLAGS = -ldflags "-X main.gitSHA=$(GIT_SHA) -X main.version=$(VERSION) -X main.name=$(BINARY)"
 TAGS    = "netgo osusergo no_stage static_build"

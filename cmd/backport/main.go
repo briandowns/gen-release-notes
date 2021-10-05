@@ -37,42 +37,10 @@ Examples:
     %[2]s -r k3s -m v1.21.5+k3s1 -p v1.21.4+k3s1 
 `
 
-// retrieveOriginalIssue
-func retrieveOriginalIssue(ctx context.Context, client *github.Client) (*github.Issue, error) {
-	// org, err := repository.OrgFromRepo(repo)
-	// if err != nil {
-	// 	return err
-	// }
-
-	issue, _, err := client.Issues.Get(ctx, "briandowns", "wings", int(issueID))
-	if err != nil {
-		return nil, err
-	}
-
-	return issue, nil
-}
-
 const (
 	issueTitle = "[%s] - %s"
 	issueBody  = "Backport fix for %s\n\n* #%d"
 )
-
-// createBackportIssues
-func createBackportIssues(ctx context.Context, client *github.Client, origIssue *github.Issue, branch string) (*github.Issue, error) {
-	title := fmt.Sprintf(issueTitle, strings.Title(branch), origIssue.GetTitle())
-	body := fmt.Sprintf(issueBody, origIssue.GetTitle(), *origIssue.Number)
-
-	issue, _, err := client.Issues.Create(ctx, "briandowns", "wings", &github.IssueRequest{
-		Title:    github.String(title),
-		Body:     github.String(body),
-		Assignee: origIssue.GetAssignee().Login,
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	return issue, nil
-}
 
 var (
 	vers     bool
@@ -143,14 +111,19 @@ func main() {
 	oauthClient.Timeout = httpTimeout
 	client := github.NewClient(oauthClient)
 
-	origIssue, err := retrieveOriginalIssue(ctx, client)
+	origIssue, err := repository.RetrieveOriginalIssue(ctx, client, repo, issueID)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
+	issue := repository.Issue{
+		Title: issueTitle,
+		Body:  issueBody,
+	}
+
 	for _, branch := range backportBranches {
-		ni, err := createBackportIssues(ctx, client, origIssue, branch)
+		ni, err := repository.CreateBackportIssues(ctx, client, origIssue, branch, &issue)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)

@@ -1,6 +1,6 @@
 GO = go
 
-BINDIR := ../../bin
+BINDIR := bin
 BINARY := backport
 
 VERSION = v0.1.0
