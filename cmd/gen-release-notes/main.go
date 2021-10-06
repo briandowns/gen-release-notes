@@ -105,6 +105,13 @@ func main() {
 	// account for processing against an rc
 	milestone = strings.Replace(milestone, "-rc", "", -1)
 
+	idx := strings.Index(milestone, "-rc")
+	if idx != -1 {
+		tmpMilestone := []rune(milestone)
+		tmpMilestone = append(tmpMilestone[0:idx], tmpMilestone[idx+4:]...)
+		milestone = string(tmpMilestone)
+	}
+
 	k8sVersion := strings.Split(milestone, "+")[0]
 	markdownVersion := strings.Replace(k8sVersion, ".", "", -1)
 	tmp := strings.Split(strings.Replace(k8sVersion, "v", "", -1), ".")

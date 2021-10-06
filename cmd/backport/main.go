@@ -23,9 +23,9 @@ Options:
     -v                   show version and exit
     -t                   github token (optional)
     -r repo              repository that should be used
-	-i issue id          original issue id
-	-c commit            commit id that is being bacported
-	-b branch(es)        branches issue is being backported to
+    -i issue id          original issue id
+    -c commit            commit id that is being bacported
+    -b branch(es)        branches issue is being backported to
 Examples: 
 	# generate release notes for RKE2 for milestone v1.21.5
     %[2]s -r k3s -m v1.21.5+k3s1 -p v1.21.4+k3s1 
