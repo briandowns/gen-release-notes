@@ -10,9 +10,6 @@ import (
 	"time"
 
 	"github.com/briandowns/gen-release-notes/repository"
-	"github.com/briandowns/gen-release-notes/token"
-	"github.com/google/go-github/v39/github"
-	"golang.org/x/oauth2"
 )
 
 var (
@@ -97,13 +94,7 @@ func main() {
 	}
 
 	ctx := context.Background()
-
-	ts := token.TokenSource{
-		AccessToken: ghToken,
-	}
-	oauthClient := oauth2.NewClient(ctx, &ts)
-	oauthClient.Timeout = httpTimeout
-	client := github.NewClient(oauthClient)
+	client := repository.NewGithub(ctx, ghToken)
 
 	content, err := repository.RetrieveChangeLogContents(ctx, client, repo, prevMilestone, milestone)
 	if err != nil {
@@ -113,6 +104,13 @@ func main() {
 
 	// account for processing against an rc
 	milestone = strings.Replace(milestone, "-rc", "", -1)
+
+	idx := strings.Index(milestone, "-rc")
+	if idx != -1 {
+		tmpMilestone := []rune(milestone)
+		tmpMilestone = append(tmpMilestone[0:idx], tmpMilestone[idx+4:]...)
+		milestone = string(tmpMilestone)
+	}
 
 	k8sVersion := strings.Split(milestone, "+")[0]
 	markdownVersion := strings.Replace(k8sVersion, ".", "", -1)
