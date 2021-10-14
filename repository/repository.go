@@ -5,11 +5,17 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/google/go-github/v39/github"
+	"golang.org/x/oauth2"
 )
 
-const releaseNoteSection = "```release-note"
+const (
+	releaseNoteSection = "```release-note"
+
+	httpTimeout = time.Second * 10
+)
 
 // repoToOrg associates repo to org.
 var repoToOrg = map[string]string{
@@ -17,7 +23,33 @@ var repoToOrg = map[string]string{
 	"k3s":  "k3s-io",
 }
 
-// OrgFromRepo
+// TokenSource
+type TokenSource struct {
+	AccessToken string
+}
+
+// Token
+func (t *TokenSource) Token() (*oauth2.Token, error) {
+	token := &oauth2.Token{
+		AccessToken: t.AccessToken,
+	}
+	return token, nil
+}
+
+// NewGithub creates a value of type github.Client pointer
+// with the given context and Github token.
+func NewGithub(ctx context.Context, token string) *github.Client {
+	ts := TokenSource{
+		AccessToken: token,
+	}
+	oauthClient := oauth2.NewClient(ctx, &ts)
+	oauthClient.Timeout = httpTimeout
+	return github.NewClient(oauthClient)
+}
+
+// OrgFromRepo gets the Github organization that the
+// given repository is in or returns an error if
+// it is not found.
 func OrgFromRepo(repo string) (string, error) {
 	if repo, ok := repoToOrg[repo]; ok {
 		return repo, nil
@@ -43,7 +75,7 @@ func IsValidRepo(repo string) bool {
 func RetrieveOriginalIssue(ctx context.Context, client *github.Client, repo string, issueID uint) (*github.Issue, error) {
 	org, err := OrgFromRepo(repo)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	issue, _, err := client.Issues.Get(ctx, org, repo, int(issueID))
