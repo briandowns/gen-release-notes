@@ -41,12 +41,12 @@ func IsValidRepo(repo string) bool {
 
 // RetrieveOriginalIssue
 func RetrieveOriginalIssue(ctx context.Context, client *github.Client, repo string, issueID uint) (*github.Issue, error) {
-	// org, err := OrgFromRepo(repo)
-	// if err != nil {
-	// 	return err
-	// }
+	org, err := OrgFromRepo(repo)
+	if err != nil {
+		return err
+	}
 
-	issue, _, err := client.Issues.Get(ctx, "briandowns", "wings", int(issueID))
+	issue, _, err := client.Issues.Get(ctx, org, repo, int(issueID))
 	if err != nil {
 		return nil, err
 	}
