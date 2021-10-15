@@ -102,11 +102,16 @@ type ChangeLog struct {
 }
 
 // CreateBackportIssues
-func CreateBackportIssues(ctx context.Context, client *github.Client, origIssue *github.Issue, branch string, i *Issue) (*github.Issue, error) {
+func CreateBackportIssues(ctx context.Context, client *github.Client, origIssue *github.Issue, repo, branch string, i *Issue) (*github.Issue, error) {
+	org, err := OrgFromRepo(repo)
+	if err != nil {
+		return nil, err
+	}
+
 	title := fmt.Sprintf(i.Title, strings.Title(branch), origIssue.GetTitle())
 	body := fmt.Sprintf(i.Body, origIssue.GetTitle(), *origIssue.Number)
 
-	issue, _, err := client.Issues.Create(ctx, "briandowns", "wings", &github.IssueRequest{
+	issue, _, err := client.Issues.Create(ctx, org, repo, &github.IssueRequest{
 		Title:    github.String(title),
 		Body:     github.String(body),
 		Assignee: origIssue.GetAssignee().Login,
