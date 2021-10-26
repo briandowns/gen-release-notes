@@ -112,7 +112,7 @@ func main() {
 	}
 
 	for _, branch := range backportBranches {
-		ni, err := repository.CreateBackportIssues(ctx, client, origIssue, branch, &issue)
+		ni, err := repository.CreateBackportIssues(ctx, client, origIssue, repo, branch, &issue)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
