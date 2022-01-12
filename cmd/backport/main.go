@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/briandowns/gen-release-notes/repository"
+	"github.com/briandowns/gen-release-notes/pkg/repository"
 )
 
 var (
@@ -17,7 +17,7 @@ var (
 )
 
 const usage = `version: %s
-Usage: %[2]s [-t token] [-r repo] [-m milestone] [-p prev milestone]
+Usage: %[2]s [-t token] [-r repo] [-m milestone] 
 Options:
     -h                   help
     -v                   show version and exit

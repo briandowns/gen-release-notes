@@ -7,9 +7,8 @@ import (
 	"os"
 	"strings"
 	"text/template"
-	"time"
 
-	"github.com/briandowns/gen-release-notes/repository"
+	"github.com/briandowns/gen-release-notes/pkg/repository"
 )
 
 var (
@@ -18,11 +17,7 @@ var (
 	gitSHA  string
 )
 
-const (
-	templateName = "release-notes"
-
-	httpTimeout = time.Second * 10
-)
+const templateName = "release-notes"
 
 const usage = `version: %s
 Usage: %[2]s [-r repo] [-m milestone] [-p prev milestone]
